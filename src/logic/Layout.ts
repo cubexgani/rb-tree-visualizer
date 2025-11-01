@@ -10,35 +10,46 @@ export function calculateNodePositions(
   
   if (!root) return positions;
 
-  const levelNodes = new Map<number, RedBlackNode[]>();
+  const levelHeight = 100;
+  const horizontalSpacing = 80; // Base spacing between nodes
+
+  // First we calculate the in-order position for each node
+  const inOrderPositions = new Map<number, number>();
+  let inOrderCounter = 0;
   
-  const assignLevels = (node: RedBlackNode | null, level: number) => {
+  const inOrderTraversal = (node: RedBlackNode | null) => {
     if (!node) return;
     
-    if (!levelNodes.has(level)) {
-      levelNodes.set(level, []);
-    }
-    levelNodes.get(level)!.push(node);
-    
-    assignLevels(node.left, level + 1);
-    assignLevels(node.right, level + 1);
+    inOrderTraversal(node.left);
+    inOrderPositions.set(node.val, inOrderCounter++);
+    inOrderTraversal(node.right);
   };
 
-  assignLevels(root, 0);
+  inOrderTraversal(root);
 
-  const width = 800;
-  const levelHeight = 100;
+  // Calculate total number of nodes to determine centering offset
+  const totalNodes = inOrderCounter;
+  const treeWidth = (totalNodes - 1) * horizontalSpacing;
+  const screenWidth = 800; // Adjust based on your canvas/container width
+  const centerOffset = (screenWidth - treeWidth) / 2;
 
-  levelNodes.forEach((nodesAtLevel, level) => {
-    const spacing = width / (nodesAtLevel.length + 1);
-    nodesAtLevel.forEach((node, index) => {
-      positions.set(node.val, {
-        x: spacing * (index + 1),
-        y: level * levelHeight + 50,
-        level
-      });
+  // Now we assign positions based on in-order position and level
+  const assignPositions = (node: RedBlackNode | null, level: number) => {
+    if (!node) return;
+    
+    const inOrderPos = inOrderPositions.get(node.val)!;
+    
+    positions.set(node.val, {
+      x: inOrderPos * horizontalSpacing + centerOffset,
+      y: level * levelHeight + 50,
+      level
     });
-  });
+    
+    assignPositions(node.left, level + 1);
+    assignPositions(node.right, level + 1);
+  };
+
+  assignPositions(root, 0);
 
   return positions;
 }
