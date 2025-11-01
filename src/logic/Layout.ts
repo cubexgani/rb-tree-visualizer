@@ -30,7 +30,7 @@ export function calculateNodePositions(
   // Calculate total number of nodes to determine centering offset
   const totalNodes = inOrderCounter;
   const treeWidth = (totalNodes - 1) * horizontalSpacing;
-  const screenWidth = 800; // Adjust based on your canvas/container width
+  const screenWidth = 1200; // Adjust based on your canvas/container width
   const centerOffset = (screenWidth - treeWidth) / 2;
 
   // Now we assign positions based on in-order position and level

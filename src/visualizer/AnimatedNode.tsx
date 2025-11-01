@@ -23,11 +23,14 @@ export const AnimatedNode: React.FC<AnimatedNodeProps> = ({
   const strokeWidth = isHighlighted ? 4 : 2;
 
   return (
-    <g className={isNewNode ? 'new-node' : ''}>
+    <g 
+      className={`node-group ${isNewNode ? 'new-node' : ''}`}
+      style={{ transform: `translate(${x}px, ${y}px)` }}
+    >
       <circle
         className={`node-circle ${isHighlighted ? 'highlighted-node' : ''}`}
-        cx={x}
-        cy={y}
+        cx={0}
+        cy={0}
         r="25"
         fill={fillColor}
         stroke={strokeColor}
@@ -35,8 +38,8 @@ export const AnimatedNode: React.FC<AnimatedNodeProps> = ({
       />
       <text
         className="node-text"
-        x={x}
-        y={y}
+        x={0}
+        y={0}
         textAnchor="middle"
         dominantBaseline="middle"
         fill="white"

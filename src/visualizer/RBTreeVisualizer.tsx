@@ -40,7 +40,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
   const animationRef = useRef<number | null>(null);
 
   console.log(displayTree.toString());
-  
+
   const executeAnimation = async () => {
     if (animationQueue.length === 0) {
       setIsAnimating(false);
@@ -51,7 +51,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
 
     const step = animationQueue[0];
     setCurrentStep(step);
-    
+
     const highlighted = new Set<number>();
     highlighted.add(step.nodeId);
     if (step.secondaryNodeId !== undefined) {
@@ -92,7 +92,25 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 overflow-x-auto">
-      <svg width="800" height={svgHeight} className="mx-auto">
+      <svg width="1200" height={svgHeight} className="mx-auto">
+
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="10"
+            markerHeight="10"
+            refX="9"
+            refY="3"
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            <path
+              d="M0,0 L0,6 L9,3 z"
+              fill="#8a8c8fff"
+            />
+          </marker>
+        </defs>
+
         {/* Render edges first */}
         {nodes.map(node => {
           const pos = positions.get(node.val);
@@ -144,7 +162,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
           );
         })}
       </svg>
-      
+
       {nodes.length === 0 && (
         <div className="text-center text-gray-400 py-20">
           Insert values to visualize the Red-Black Tree
