@@ -32,16 +32,6 @@ export default class RedBlackNode {
         let colStr: 'B' | 'R' = this.color === Color.BLACK ? 'B' : 'R';
         return `(${colStr}, ${this.val})`;
     }
-    // Serialize node for snapshot (without circular parent refs)
-  toJSON(): any {
-    return {
-      id: this.id,
-      value: this.val,
-      color: this.color,
-      left: this.left ? this.left.toJSON() : null,
-      right: this.right ? this.right.toJSON() : null
-    };
-  }
 
   // Deep clone a node
   static clone(node: RedBlackNode | null, parent: RedBlackNode | null = null): RedBlackNode | null {
@@ -54,19 +44,5 @@ export default class RedBlackNode {
     cloned.right = RedBlackNode.clone(node.right, cloned);
     
     return cloned;
-  }
-
-  // Restore from JSON
-  static fromJSON(json: any, parent: RedBlackNode | null = null): RedBlackNode | null {
-    if (!json) return null;
-    
-    const node = new RedBlackNode(json.value, parent, json.id);
-    node.color = json.color;
-    node.parent = parent;
-    node.left = RedBlackNode.fromJSON(json.left, node);
-    node.right = RedBlackNode.fromJSON(json.right, node);
-    
-    return node;
-  }
-    
+  } 
 }

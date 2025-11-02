@@ -1,6 +1,8 @@
 // This is a hacky way to implement enums.
 // In this project, node itself compiles and runs the typescript, and it doesn't support enums yet.
 
+import RedBlackNode from "../logic/RedBlackNode";
+
 export const Color = {
   RED: 'RED',
   BLACK: 'BLACK',
@@ -27,7 +29,7 @@ export interface AnimationStep {
   secondaryNodeId?: number;
   description: string;
   newColor?: Color;
-  treeSnapshot: string; // JSON serialized tree
+  treeSnapshot: RedBlackNode | null;
 }
 
 export interface NodePosition {

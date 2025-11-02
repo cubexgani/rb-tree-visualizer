@@ -17,8 +17,9 @@ export default class RedBlackTree {
         this.id = Date.now();
     }
     
-    private createSnapshot(): string {
-        return JSON.stringify(this.root ? this.root.toJSON() : null);
+    private createSnapshot(): RedBlackNode | null {
+        // return JSON.stringify(this.root ? this.root.toJSON() : null);
+        return RedBlackNode.clone(this.root);
     }
     
     // Add animation step with current tree state
@@ -409,9 +410,9 @@ export default class RedBlackTree {
     }
     
     // Restore tree from snapshot
-    restoreFromSnapshot(snapshot: string): void {
-        const json = JSON.parse(snapshot);
-        this.root = RedBlackNode.fromJSON(json);
+    restoreFromSnapshot(snapshot: RedBlackNode | null): void {
+        // const json = JSON.parse(snapshot);
+        this.root = snapshot;
     }
     
     toArray(): RedBlackNode[] {
