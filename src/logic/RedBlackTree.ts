@@ -49,15 +49,20 @@ export default class RedBlackTree {
     */
     inorder() {
         if (!this.root) return [];
-        let str: number[] = [];
-        RedBlackTree.getInorderString(this.root, str);
-        return str;
+        let arr: number[] = [];
+        this.getInorderArray(this.root, arr);
+        return arr;
     }
-    private static getInorderString(node: RedBlackNode | null, str: number[]) {
+    private getInorderArray(node: RedBlackNode | null, arr: number[]) {
         if (!node) return;
-        this.getInorderString(node.left, str);
-        str.push(node.val);
-        this.getInorderString(node.right, str);
+        this.getInorderArray(node.left, arr);
+        this.addStep(
+        AnimationType.TRAVERSE,
+        node.val,
+        `Visiting ${node.val}`
+      );
+        arr.push(node.val);
+        this.getInorderArray(node.right, arr);
     }
     
     /**
