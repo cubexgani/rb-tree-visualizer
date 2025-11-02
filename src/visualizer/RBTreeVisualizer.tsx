@@ -113,11 +113,11 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
 
         {/* Render edges first */}
         {nodes.map((node, idx) => {
-          const pos = positions.get(node.val);
+          const pos = positions.get(node.id);
           if (!pos) return null;
 
-          const leftPos = node.left ? positions.get(node.left.val) : null;
-          const rightPos = node.right ? positions.get(node.right.val) : null;
+          const leftPos = node.left ? positions.get(node.left.id) : null;
+          const rightPos = node.right ? positions.get(node.right.id) : null;
 
           return (
             <g key={`edges-${idx}`}>
@@ -143,10 +143,10 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
 
         {/* Render nodes on top */}
         {nodes.map((node, idx) => {
-          const pos = positions.get(node.val);
+          const pos = positions.get(node.id);
           if (!pos) return null;
 
-          const isHighlighted = highlightedNodes.has(node.val);
+          const isHighlighted = highlightedNodes.has(node.id);        
           const isNewNode = currentStep?.type === AnimationType.INSERT && currentStep.nodeId === node.val;
 
           return (

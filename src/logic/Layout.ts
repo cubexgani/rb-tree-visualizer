@@ -21,7 +21,7 @@ export function calculateNodePositions(
     if (!node) return;
     
     inOrderTraversal(node.left);
-    inOrderPositions.set(node.val, inOrderCounter++);
+    inOrderPositions.set(node.id, inOrderCounter++);
     inOrderTraversal(node.right);
   };
 
@@ -37,9 +37,9 @@ export function calculateNodePositions(
   const assignPositions = (node: RedBlackNode | null, level: number) => {
     if (!node) return;
     
-    const inOrderPos = inOrderPositions.get(node.val)!;
+    const inOrderPos = inOrderPositions.get(node.id)!;
     
-    positions.set(node.val, {
+    positions.set(node.id, {
       x: inOrderPos * horizontalSpacing + centerOffset,
       y: level * levelHeight + 50,
       level

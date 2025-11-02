@@ -15,13 +15,13 @@ export default class RedBlackNode {
     /**
     * Creates a new node for a red black tree.
     */
-    constructor(val: number, paren: RedBlackNode | null = null) {
+    constructor(val: number, paren: RedBlackNode | null = null, id: number) {
         this.val = val;
         this.left = null;
         this.right = null;
         this.parent = paren;
         this.color = Color.BLACK;
-        this.id = Date.now();
+        this.id = id;
     }
 
     /**
@@ -35,6 +35,7 @@ export default class RedBlackNode {
     // Serialize node for snapshot (without circular parent refs)
   toJSON(): any {
     return {
+      id: this.id,
       value: this.val,
       color: this.color,
       left: this.left ? this.left.toJSON() : null,
@@ -46,7 +47,7 @@ export default class RedBlackNode {
   static clone(node: RedBlackNode | null, parent: RedBlackNode | null = null): RedBlackNode | null {
     if (!node) return null;
     
-    const cloned = new RedBlackNode(node.val);
+    const cloned = new RedBlackNode(node.val, node.parent, node.id);
     cloned.color = node.color;
     cloned.parent = parent;
     cloned.left = RedBlackNode.clone(node.left, cloned);
@@ -59,7 +60,7 @@ export default class RedBlackNode {
   static fromJSON(json: any, parent: RedBlackNode | null = null): RedBlackNode | null {
     if (!json) return null;
     
-    const node = new RedBlackNode(json.value);
+    const node = new RedBlackNode(json.value, parent, json.id);
     node.color = json.color;
     node.parent = parent;
     node.left = RedBlackNode.fromJSON(json.left, node);
