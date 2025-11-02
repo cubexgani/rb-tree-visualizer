@@ -112,7 +112,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
         </defs>
 
         {/* Render edges first */}
-        {nodes.map(node => {
+        {nodes.map((node, idx) => {
           const pos = positions.get(node.val);
           if (!pos) return null;
 
@@ -120,7 +120,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
           const rightPos = node.right ? positions.get(node.right.val) : null;
 
           return (
-            <g key={`edges-${node.val}`}>
+            <g key={`edges-${idx}`}>
               {leftPos && (
                 <AnimatedArrow
                   x1={pos.x}
@@ -142,7 +142,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
         })}
 
         {/* Render nodes on top */}
-        {nodes.map(node => {
+        {nodes.map((node, idx) => {
           const pos = positions.get(node.val);
           if (!pos) return null;
 
@@ -151,7 +151,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
 
           return (
             <AnimatedNode
-              key={`node-${node.val}`}
+              key={`node-${idx}`}
               value={node.val}
               color={node.color}
               x={pos.x}

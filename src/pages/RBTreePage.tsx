@@ -33,19 +33,24 @@ export const RBTreePage: React.FC = () => {
 
   const handleSearch = () => {
     const value = parseInt(searchValue);
+    console.log(value);
     if (isNaN(value)) return;
 
-    displayTree.root = RedBlackNode.clone(tree.root);
-    const res = displayTree.search(value);
+    // displayTree.root = RedBlackNode.clone(tree.root);
+    const res = tree.search(value);
+    console.log(res);
     setAnimationQueue(tree.getAnimationSteps());
+    console.log(animationQueue);
+    
     setIsAnimating(true);
     setTraversalResult('');
   };
 
   const handleInorder = () => {
-    displayTree.root = RedBlackNode.clone(tree.root);
-    const steps = displayTree.inorder();
-    const result = steps.split(' ').join(' → ');
+    // displayTree.root = RedBlackNode.clone(tree.root);
+    const steps = tree.inorder();
+    console.log(steps);
+    const result = steps.join(' → ');
     setAnimationQueue(tree.getAnimationSteps());
     setIsAnimating(true);
     setTraversalResult(result);
