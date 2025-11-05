@@ -4,6 +4,7 @@ import RedBlackNode from "./RedBlackNode.ts";
 /**
 * The RedBlackTree class defines a red black tree.
 */
+
 export default class RedBlackTree {
     root: RedBlackNode | null;
     animationSteps: AnimationStep[];
@@ -128,14 +129,14 @@ export default class RedBlackTree {
                 x.id, `Comparing ${val} with ${x.val}`,
                 val, undefined
             );
-            if (val >= x.val) x = x.right;
+            if (val > x.val) x = x.right;
             else x = x.left;
         }
         let z = new RedBlackNode(val, y, this.id++);
         z.color = Color.RED;
         // Didnt even enter the loop, implying empty tree
         if (!y) this.root = z;
-        else if (val >= y.val) y.right = z;
+        else if (val > y.val) y.right = z;
         else y.left = z;
         this.addStep(
             AnimationType.INSERT,
@@ -403,7 +404,7 @@ export default class RedBlackTree {
         }
         this.addStep(
             AnimationType.FOUND,
-            val,
+            tmp.id,
             `Found ${val}!`,
         )
 

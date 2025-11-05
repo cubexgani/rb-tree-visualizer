@@ -20,6 +20,7 @@ export const RBTreePage: React.FC = () => {
   const [highlightedNodes, setHighlightedNodes] = useState<Set<number>>(new Set());
   const [traversalResult, setTraversalResult] = useState<string>('');
   const [traversalType, setTraversalType] = useState<string>('');
+  const [searchError, setSearchError] = useState<string>('');
 
   const handleInsert = () => {
     const value = parseInt(insertValue);
@@ -41,6 +42,17 @@ export const RBTreePage: React.FC = () => {
 
     setIsAnimating(true);
     setTraversalResult('');
+
+    // Set error if node not found
+    if (res.err) {
+      setSearchError(res.err);
+      // Clear error after 5 seconds
+      setTimeout(() => {
+        setSearchError('');
+      }, 5000);
+    } else {
+      setSearchError('');
+    }
   };
 
   const handleInorder = () => {
@@ -107,6 +119,7 @@ export const RBTreePage: React.FC = () => {
         animationQueueLength={animationQueue.length}
         traversalResult={traversalResult}
         traversalType={traversalType}
+        searchError={searchError}
       />
 
       <RBTreeVisualizer

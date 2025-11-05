@@ -8,6 +8,7 @@ interface AnimatedNodeProps {
   y: number;
   isHighlighted: boolean;
   isNewNode: boolean;
+  isFound: boolean;
 }
 
 export const AnimatedNode: React.FC<AnimatedNodeProps> = ({
@@ -16,19 +17,22 @@ export const AnimatedNode: React.FC<AnimatedNodeProps> = ({
   x,
   y,
   isHighlighted,
-  isNewNode
+  isNewNode,
+  isFound
 }) => {
   const fillColor = color === Color.RED ? '#EF4444' : '#1F2937';
-  const strokeColor = isHighlighted ? '#FBBF24' : '#9CA3AF';
-  const strokeWidth = isHighlighted ? 4 : 2;
+
+  // Use green highlight if node is found, otherwise use yellow for normal highlight
+  const strokeColor = isFound ? '#09b87eff' : (isHighlighted ? '#FBBF24' : '#9CA3AF');
+  const strokeWidth = (isHighlighted || isFound) ? 4 : 2;
 
   return (
-    <g 
+    <g
       className={`node-group ${isNewNode ? 'new-node' : ''}`}
       style={{ transform: `translate(${x}px, ${y}px)` }}
     >
       <circle
-        className={`node-circle ${isHighlighted ? 'highlighted-node' : ''}`}
+        className={`node-circle ${isHighlighted ? 'highlighted-node' : ''} ${isFound ? 'found-node' : ''}`}
         cx={0}
         cy={0}
         r="25"

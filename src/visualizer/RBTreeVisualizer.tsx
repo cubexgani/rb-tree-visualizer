@@ -38,6 +38,8 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
   setNodes
 }) => {
   const animationRef = useRef<number | null>(null);
+  const [foundNodes, setFoundNodes] = useState<Set<number>>(new Set());
+  const foundTimeoutRef = useRef<number | null>(null);
 
   console.log(displayTree.toString());
 
@@ -52,6 +54,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
     const step = animationQueue[0];
     setCurrentStep(step);
 
+    // Build traversal highlight set (yellow)
     const highlighted = new Set<number>();
     highlighted.add(step.nodeId);
     if (step.secondaryNodeId !== undefined) {
@@ -59,11 +62,31 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
     }
     setHighlightedNodes(highlighted);
 
-    // Apply the tree snapshot from this step
+    // *** IMPORTANT: apply the snapshot BEFORE marking foundNodes ***
+    // This ensures the rendered nodes correspond to the IDs we're highlighting.
     displayTree.restoreFromSnapshot(step.treeSnapshot);
     setNodes([...displayTree.toArray()]);
 
-    animationRef.current = setTimeout(() => {
+    // Handle FOUND animation type - highlight in green for 5 seconds
+    if (step.type === AnimationType.FOUND) {
+      const foundSet = new Set<number>();
+      foundSet.add(step.nodeId);
+      setFoundNodes(foundSet);
+
+      // Clear any existing timeout
+      if (foundTimeoutRef.current) {
+        clearTimeout(foundTimeoutRef.current);
+      }
+
+      // Clear the green highlight after 5 seconds
+      foundTimeoutRef.current = window.setTimeout(() => {
+        setFoundNodes(new Set());
+        foundTimeoutRef.current = null;
+      }, 5000);
+    }
+
+    // Advance to next animation step after a short delay
+    animationRef.current = window.setTimeout(() => {
       setAnimationQueue(prev => prev.slice(1));
     }, 500);
   };
@@ -74,14 +97,19 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
     } else if (animationQueue.length === 0) {
       setIsAnimating(false);
       setCurrentStep(null);
+      // Only clear the traversal highlight, not found nodes
       setHighlightedNodes(new Set());
+      // Do NOT clear foundNodes here — let the 5s timer handle it
     }
 
     return () => {
       if (animationRef.current) {
         clearTimeout(animationRef.current);
       }
+      // Do NOT clear foundTimeoutRef here — allow the 5s timer to run to completion
     };
+
+    // Intentionally run when animationQueue or isAnimating updates
   }, [animationQueue, isAnimating]);
 
   const positions = calculateNodePositions(displayTree.root);
@@ -146,8 +174,9 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
           const pos = positions.get(node.id);
           if (!pos) return null;
 
-          const isHighlighted = highlightedNodes.has(node.id);        
+          const isHighlighted = highlightedNodes.has(node.id);
           const isNewNode = currentStep?.type === AnimationType.INSERT && currentStep.nodeId === node.val;
+          const isFound = foundNodes.has(node.id);
 
           return (
             <AnimatedNode
@@ -158,6 +187,7 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
               y={pos.y}
               isHighlighted={isHighlighted}
               isNewNode={isNewNode}
+              isFound={isFound}
             />
           );
         })}
