@@ -1,5 +1,3 @@
-// visualizer/RBTreeVisualizer.tsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimationType, type AnimationStep } from '../types';
 import RedBlackTree from '../logic/RedBlackTree';
@@ -9,7 +7,6 @@ import { AnimatedNode } from './AnimatedNode';
 import { AnimatedArrow } from './AnimatedArrow';
 
 interface RBTreeVisualizerProps {
-  tree: RedBlackTree;
   displayTree: RedBlackTree;
   animationQueue: AnimationStep[];
   setAnimationQueue: React.Dispatch<React.SetStateAction<AnimationStep[]>>;
@@ -24,7 +21,6 @@ interface RBTreeVisualizerProps {
 }
 
 export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
-  tree,
   displayTree,
   animationQueue,
   setAnimationQueue,

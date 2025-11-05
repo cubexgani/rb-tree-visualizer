@@ -1,5 +1,5 @@
 import React from 'react';
-import { Color, AnimationType } from '../types/index';
+import { Color } from '../types/index';
 
 interface AnimatedNodeProps {
   value: number;

@@ -1,5 +1,3 @@
-// logic/Layout.ts
-
 import RedBlackNode from './RedBlackNode';
 import type { NodePosition } from '../types';
 

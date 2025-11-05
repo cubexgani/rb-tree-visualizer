@@ -123,7 +123,6 @@ export const RBTreePage: React.FC = () => {
       />
 
       <RBTreeVisualizer
-        tree={tree}
         displayTree={displayTree}
         animationQueue={animationQueue}
         setAnimationQueue={setAnimationQueue}
