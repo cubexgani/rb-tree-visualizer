@@ -82,13 +82,13 @@ export const RBTreeVisualizer: React.FC<RBTreeVisualizerProps> = ({
       foundTimeoutRef.current = window.setTimeout(() => {
         setFoundNodes(new Set());
         foundTimeoutRef.current = null;
-      }, 5000);
+      }, 6000);
     }
 
     // Advance to next animation step after a short delay
     animationRef.current = window.setTimeout(() => {
       setAnimationQueue(prev => prev.slice(1));
-    }, 500);
+    }, 800);
   };
 
   useEffect(() => {
