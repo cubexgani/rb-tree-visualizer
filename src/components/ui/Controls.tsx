@@ -14,7 +14,7 @@ interface ControlsProps {
   onPreorder: () => void;
   onPostorder: () => void;
   onPauseResume: () => void;
-  onReset: () => void;
+  onSkip: () => void;
   hasAnimationQueue: boolean;
 }
 
@@ -31,7 +31,7 @@ export const Controls: React.FC<ControlsProps> = ({
   onPreorder,
   onPostorder,
   onPauseResume,
-  onReset,
+  onSkip,
   hasAnimationQueue
 }) => {
   return (
@@ -117,12 +117,12 @@ export const Controls: React.FC<ControlsProps> = ({
         </button>
 
         <button
-          onClick={onReset}
+          onClick={onSkip}
           disabled={!isAnimating && !hasAnimationQueue}
           className="px-4 py-2 bg-red-600 rounded-lg hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center gap-2 transition-all"
         >
           {/* <RotateCcw size={20} /> */}
-          Reset
+          Skip
         </button>
       </div>
     </div>

@@ -86,7 +86,7 @@ export const RBTreePage: React.FC = () => {
     setIsAnimating(!isAnimating);
   };
 
-  const handleReset = () => {
+  const handleSkip = () => {
     setAnimationQueue([]);
     setIsAnimating(false);
     setCurrentStep(null);
@@ -110,7 +110,7 @@ export const RBTreePage: React.FC = () => {
         onPreorder={handlePreorder}
         onPostorder={handlePostorder}
         onPauseResume={handlePauseResume}
-        onReset={handleReset}
+        onSkip={handleSkip}
         hasAnimationQueue={animationQueue.length > 0}
       />
 
