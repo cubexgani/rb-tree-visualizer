@@ -45,6 +45,9 @@ export const Controls: React.FC<ControlsProps> = ({
             placeholder="Enter value to insert"
             className="flex-1 px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             disabled={isAnimating}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && insertValue) onInsert();
+            }}
           />
           <button
             onClick={onInsert}
@@ -64,6 +67,9 @@ export const Controls: React.FC<ControlsProps> = ({
             placeholder="Enter value to search"
             className="flex-1 px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
             disabled={isAnimating}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && searchValue) onSearch();
+            }}
           />
           <button
             onClick={onSearch}
