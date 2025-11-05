@@ -12,16 +12,16 @@ export default class RedBlackTree {
     * Make a new red black tree.
     */
     constructor() {
-        this.root = null;        
+        this.root = null;
         this.animationSteps = [];
         this.id = Date.now();
     }
-    
+
     private createSnapshot(): RedBlackNode | null {
         // return JSON.stringify(this.root ? this.root.toJSON() : null);
         return RedBlackNode.clone(this.root);
     }
-    
+
     // Add animation step with current tree state
     private addStep(
         type: AnimationType,
@@ -39,13 +39,13 @@ export default class RedBlackTree {
             treeSnapshot: this.createSnapshot()
         });
     }
-    
+
     getAnimationSteps() {
-        let st = this.animationSteps;      
+        let st = this.animationSteps;
         this.animationSteps = [];
         return st;
     }
-    
+
     /**
     * Traverses the tree in an inorder manner. If tree is empty, simply returns "Empty".
     * @returns A string containing the elements arranged in inorder fashion.
@@ -66,6 +66,52 @@ export default class RedBlackTree {
         );
         arr.push(node.val);
         this.getInorderArray(node.right, arr);
+    }
+
+    /**
+ * Traverses the tree in a preorder manner. If tree is empty, simply returns empty array.
+ * @returns An array containing the elements arranged in preorder fashion.
+ */
+    preorder() {
+        if (!this.root) return [];
+        let arr: number[] = [];
+        this.getPreorderArray(this.root, arr);
+        return arr;
+    }
+
+    private getPreorderArray(node: RedBlackNode | null, arr: number[]) {
+        if (!node) return;
+        this.addStep(
+            AnimationType.TRAVERSE,
+            node.id,
+            `Visiting ${node.val}`
+        );
+        arr.push(node.val);
+        this.getPreorderArray(node.left, arr);
+        this.getPreorderArray(node.right, arr);
+    }
+
+    /**
+     * Traverses the tree in a postorder manner. If tree is empty, simply returns empty array.
+     * @returns An array containing the elements arranged in postorder fashion.
+     */
+    postorder() {
+        if (!this.root) return [];
+        let arr: number[] = [];
+        this.getPostorderArray(this.root, arr);
+        return arr;
+    }
+
+    private getPostorderArray(node: RedBlackNode | null, arr: number[]) {
+        if (!node) return;
+        this.getPostorderArray(node.left, arr);
+        this.getPostorderArray(node.right, arr);
+        this.addStep(
+            AnimationType.TRAVERSE,
+            node.id,
+            `Visiting ${node.val}`
+        );
+        arr.push(node.val);
     }
     
     /**
@@ -97,7 +143,7 @@ export default class RedBlackTree {
         )
         this.insertFix(z);
     }
-    
+
     /**
     * Rotates a node rightwards. For more explanation, read CLRS.
     * @param x The node to be rotated.
@@ -145,14 +191,14 @@ export default class RedBlackTree {
         else x.parent.left = y;
         y.left = x;
         x.parent = y;
-        
+
     }
-    
+
     /*
     Following are a series of getters which removes the mess of null checking from
     the fix after insert code.
     */
-    
+
     parentOf(x: RedBlackNode | null) {
         return x ? x.parent : null;
     }
@@ -171,7 +217,7 @@ export default class RedBlackTree {
     colorOf(x: RedBlackNode | null) {
         return x ? x.color : Color.BLACK;
     }
-    
+
     /**
     * Changes the color of the node, if it exists.
     * @param x The node whose color is to be changed.
@@ -180,7 +226,7 @@ export default class RedBlackTree {
     setColorOf(x: RedBlackNode | null, c: Color) {
         if (x) x.color = c;
     }
-    
+
     /**
     * The meat of the implementation. It fixes the RB tree after a node is inserted.
     * Fixes include restoring the color properties of the nodes, and performing rotations based on the various
@@ -198,11 +244,11 @@ export default class RedBlackTree {
                         z.id, `Uncle ${y!.val} is red, recoloring`,
                         y!.id
                     )
-                    
+
                     // blacken parent and uncle
                     this.setColorOf(this.parentOf(z), Color.BLACK);
                     this.setColorOf(y, Color.BLACK);
-                    
+
                     this.addStep(
                         AnimationType.RECOLOR,
                         z.parent!.id,
@@ -214,7 +260,7 @@ export default class RedBlackTree {
                         y!.id, `Recolor uncle ${y!.val} to black`,
                         undefined, Color.BLACK
                     )
-                    
+
                     // redden the grandparent
                     this.setColorOf(this.parentOf(this.parentOf(z)), Color.RED);
                     this.addStep(
@@ -223,7 +269,7 @@ export default class RedBlackTree {
                         `Recolor grandparent ${z.parent!.parent!.val} to red`,
                         undefined, Color.RED
                     );
-                    
+
                     // go to grandparent to continue fixing
                     z = this.parentOf(this.parentOf(z));
                 }
@@ -234,13 +280,13 @@ export default class RedBlackTree {
                     }
                     // case 3 may or may not result after case 2
                     this.setColorOf(this.parentOf(z), Color.BLACK);
-                    
+
                     this.addStep(
                         AnimationType.RECOLOR,
                         z!.parent!.id, `Recolor parent ${z!.parent!.val} to black`,
                         undefined, Color.BLACK
                     );
-                    
+
                     this.setColorOf(this.parentOf(this.parentOf(z)), Color.RED);
                     this.addStep(
                         AnimationType.RECOLOR,
@@ -249,7 +295,7 @@ export default class RedBlackTree {
                         undefined,
                         Color.RED
                     );
-                    
+
                     this.rotateRight(this.parentOf(this.parentOf(z)));
                 }
             }
@@ -263,10 +309,10 @@ export default class RedBlackTree {
                         y!.id,
                         undefined
                     );
-                    
+
                     this.setColorOf(this.parentOf(z), Color.BLACK);
                     this.setColorOf(y, Color.BLACK);
-                    
+
                     this.addStep(
                         AnimationType.RECOLOR,
                         z.parent!.id,
@@ -278,7 +324,7 @@ export default class RedBlackTree {
                         y!.id, `Recolor uncle ${y!.val} to black`,
                         undefined, Color.BLACK
                     );
-                    
+
                     this.setColorOf(this.parentOf(this.parentOf(z)), Color.RED);
                     this.addStep(
                         AnimationType.RECOLOR,
@@ -286,7 +332,7 @@ export default class RedBlackTree {
                         `Recolor grandparent ${z.parent!.parent!.val} to red`,
                         undefined, Color.RED
                     );
-                    
+
                     z = this.parentOf(this.parentOf(z));
                 }
                 else {
@@ -300,7 +346,7 @@ export default class RedBlackTree {
                         z!.parent!.id, `Recolor parent ${z!.parent!.val} to black`,
                         undefined, Color.BLACK
                     );
-                    
+
                     this.setColorOf(this.parentOf(this.parentOf(z)), Color.RED);
                     this.addStep(
                         AnimationType.RECOLOR,
@@ -309,7 +355,7 @@ export default class RedBlackTree {
                         undefined,
                         Color.RED
                     );
-                    
+
                     this.rotateLeft(this.parentOf(this.parentOf(z)));
                 }
             }
@@ -325,15 +371,15 @@ export default class RedBlackTree {
             Color.BLACK
         );
     }
-    
+
     /**
     * Searches for specified value in the red black tree. If any error occurs, the error string is returned.
     * If value is found, the value is returned, with no error string.
     * @param val The value to be searched
     * @returns A return value and an error string
     */
-    search(val: number) : {ret: number, err: string} {
-        if (!this.root) return {ret: 0, err: "Tree is empty"};
+    search(val: number): { ret: number, err: string } {
+        if (!this.root) return { ret: 0, err: "Tree is empty" };
         let tmp: RedBlackNode | null = this.root;
         while (tmp) {
             this.addStep(
@@ -353,23 +399,23 @@ export default class RedBlackTree {
                 val,
                 `${val} not found in tree`,
             );
-            return {ret: 0, err: "Value not found"};  
+            return { ret: 0, err: "Value not found" };
         }
         this.addStep(
             AnimationType.FOUND,
             val,
             `Found ${val}!`,
         )
-        
-        return {ret: tmp.val, err: ""};
+
+        return { ret: tmp.val, err: "" };
     }
-    
+
     /**
     * Makes a string representation of the tree and returns it. If no elements are present, simply
     * returns "Empty".
     * @returns The string representation.
     */
-    toString() : string {
+    toString(): string {
         if (!this.root) return "Empty";
         return RedBlackTree.printWithTabs(this.root, '', true);
     }
@@ -383,9 +429,9 @@ export default class RedBlackTree {
     * @param isLeft Whether the current child is a left node or not.
     * @returns A really cool string representation.
     */
-    private static printWithTabs(node: RedBlackNode | null, prefix: string, isLeft: boolean) : string {
+    private static printWithTabs(node: RedBlackNode | null, prefix: string, isLeft: boolean): string {
         if (!node) return '';
-        
+
         let retstr = '';
         if (node.right) {
             /*
@@ -408,29 +454,29 @@ export default class RedBlackTree {
         }
         return retstr;
     }
-    
+
     // Restore tree from snapshot
     restoreFromSnapshot(snapshot: RedBlackNode | null): void {
         // const json = JSON.parse(snapshot);
         this.root = snapshot;
     }
-    
+
     toArray(): RedBlackNode[] {
         const nodes: RedBlackNode[] = [];
         const queue: RedBlackNode[] = [];
-        
+
         if (this.root) {
             queue.push(this.root);
         }
-        
+
         while (queue.length > 0) {
             const node = queue.shift()!;
             nodes.push(node);
-            
+
             if (node.left) queue.push(node.left);
             if (node.right) queue.push(node.right);
         }
-        
+
         return nodes;
     }
 }

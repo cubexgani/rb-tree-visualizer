@@ -19,6 +19,7 @@ export const RBTreePage: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<number>>(new Set());
   const [traversalResult, setTraversalResult] = useState<string>('');
+  const [traversalType, setTraversalType] = useState<string>('');
 
   const handleInsert = () => {
     const value = parseInt(insertValue);
@@ -37,7 +38,7 @@ export const RBTreePage: React.FC = () => {
 
     const res = tree.search(value);
     setAnimationQueue(tree.getAnimationSteps());
-    
+
     setIsAnimating(true);
     setTraversalResult('');
   };
@@ -48,6 +49,25 @@ export const RBTreePage: React.FC = () => {
     setAnimationQueue(tree.getAnimationSteps());
     setIsAnimating(true);
     setTraversalResult(result);
+    setTraversalType('Inorder');
+  };
+
+  const handlePreorder = () => {
+    const steps = tree.preorder();
+    const result = steps.join(' → ');
+    setAnimationQueue(tree.getAnimationSteps());
+    setIsAnimating(true);
+    setTraversalResult(result);
+    setTraversalType('Preorder');
+  };
+
+  const handlePostorder = () => {
+    const steps = tree.postorder();
+    const result = steps.join(' → ');
+    setAnimationQueue(tree.getAnimationSteps());
+    setIsAnimating(true);
+    setTraversalResult(result);
+    setTraversalType('Postorder');
   };
 
   const handlePauseResume = () => {
@@ -75,6 +95,8 @@ export const RBTreePage: React.FC = () => {
         onInsert={handleInsert}
         onSearch={handleSearch}
         onInorder={handleInorder}
+        onPreorder={handlePreorder}
+        onPostorder={handlePostorder}
         onPauseResume={handlePauseResume}
         onReset={handleReset}
         hasAnimationQueue={animationQueue.length > 0}
@@ -84,6 +106,7 @@ export const RBTreePage: React.FC = () => {
         currentStep={currentStep}
         animationQueueLength={animationQueue.length}
         traversalResult={traversalResult}
+        traversalType={traversalType}
       />
 
       <RBTreeVisualizer

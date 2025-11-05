@@ -5,12 +5,14 @@ interface StatusDisplayProps {
   currentStep: AnimationStep | null;
   animationQueueLength: number;
   traversalResult: string;
+  traversalType: string;
 }
 
 export const StatusDisplay: React.FC<StatusDisplayProps> = ({
   currentStep,
   animationQueueLength,
-  traversalResult
+  traversalResult,
+  traversalType
 }) => {
   return (
     <>
@@ -26,7 +28,7 @@ export const StatusDisplay: React.FC<StatusDisplayProps> = ({
 
       {traversalResult && (
         <div className="bg-gray-800 rounded-lg p-4 mb-6 transition-all">
-          <h3 className="text-lg font-semibold mb-2">Inorder Traversal Result:</h3>
+          <h3 className="text-lg font-semibold mb-2">{traversalType} Traversal Result:</h3>
           <p className="text-green-400 font-mono">{traversalResult}</p>
         </div>
       )}

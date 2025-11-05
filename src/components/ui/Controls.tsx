@@ -11,6 +11,8 @@ interface ControlsProps {
   onInsert: () => void;
   onSearch: () => void;
   onInorder: () => void;
+  onPreorder: () => void;
+  onPostorder: () => void;
   onPauseResume: () => void;
   onReset: () => void;
   hasAnimationQueue: boolean;
@@ -26,6 +28,8 @@ export const Controls: React.FC<ControlsProps> = ({
   onInsert,
   onSearch,
   onInorder,
+  onPreorder,
+  onPostorder,
   onPauseResume,
   onReset,
   hasAnimationQueue
@@ -79,6 +83,22 @@ export const Controls: React.FC<ControlsProps> = ({
           className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
         >
           Inorder Traversal
+        </button>
+
+        <button
+          onClick={onPreorder}
+          disabled={isAnimating || !hasNodes}
+          className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
+        >
+          Preorder Traversal
+        </button>
+
+        <button
+          onClick={onPostorder}
+          disabled={isAnimating || !hasNodes}
+          className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-all"
+        >
+          Postorder Traversal
         </button>
 
         <button
